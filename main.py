@@ -15,6 +15,9 @@ def getVoicesDetails():
         names.append(voice.id.replace("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_",''))
     return names
 
+def ChangePitch(event):
+    engine.setProperty('rate',Rate.get())
+
 def SpeakField():
     text = field.get("1.0", tk.END)
     engine.say(text)
@@ -23,6 +26,8 @@ def SpeakField():
 def SpeakCommand(command):
     engine.say(command)
     engine.runAndWait()
+
+
 
 def recognise():
     try: 
@@ -65,7 +70,7 @@ voiceIDVar.set(voicesIDS[0])
 engine.setProperty('voice',voiceIDVar.get())
 
 Selector = tk.OptionMenu(window, voiceIDVar, *voicesIDS)
-Selector.grid(row = 1, column = 0, padx= 5 ,pady = 5,columnspan = 2, sticky = tk.N + tk.S + tk.E + tk.W)
+Selector.grid(row = 1, column = 0, padx= 5 ,columnspan = 2, sticky = tk.N + tk.S + tk.E + tk.W)
 
 def change_dropdown(*args):
     engine.setProperty('voice',"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_"+voiceIDVar.get())
@@ -74,22 +79,31 @@ voiceIDVar.trace('w', change_dropdown)
 
 #-----------------drop Down controller END-----------------#
 
+Ratelbl = tk.Label(text="Rate")
+Ratelbl.grid(row = 2, column = 0)
+
+Rate = tk.Scale(window, from_=100, to=300,orient=tk.HORIZONTAL)
+Rate.set(200)
+Rate.bind("<ButtonRelease-1>", ChangePitch)
+Rate.grid(row = 2, column = 1,sticky = tk.N + tk.S + tk.E + tk.W)
+
 recognize_btn = tk.Button(
     text="Recognize",
     command=recognise,
     fg = "Green"
 )
-recognize_btn.grid(row = 2, column = 0, padx= 5 ,pady = 5, sticky = tk.N + tk.S + tk.E + tk.W)
+recognize_btn.grid(row = 3, column = 0, padx= 5 ,pady = 5, sticky = tk.N + tk.S + tk.E + tk.W)
 
 speak = tk.Button(
     text="Speak",
     command=SpeakField,
     fg="Blue"
 )
-speak.grid(row = 2, column = 1, padx= 5 ,pady = 5, sticky = tk.N+tk.S+tk.E+tk.W)
+speak.grid(row = 3, column = 1, padx= 5 ,pady = 5, sticky = tk.N+tk.S+tk.E+tk.W)
+
 
 field = tk.Text(width=100)
-field.grid(row = 3, column = 0, padx= 5 ,pady = 5, columnspan = 2)
+field.grid(row = 4, column = 0, padx= 5 ,pady = 5, columnspan = 2)
 
 if __name__ == "__main__":
     window.mainloop()
