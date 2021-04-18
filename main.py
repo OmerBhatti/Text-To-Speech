@@ -1,3 +1,5 @@
+
+
 import speech_recognition as sr
 import pyttsx3
 import tkinter as tk
@@ -10,7 +12,7 @@ voices = engine.getProperty('voices')
 def getVoicesDetails():
     names = []
     for voice in voices:
-        names.append(voice.id)
+        names.append(voice.id.replace("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_",''))
     return names
 
 def SpeakField():
@@ -63,10 +65,10 @@ voiceIDVar.set(voicesIDS[0])
 engine.setProperty('voice',voiceIDVar.get())
 
 Selector = tk.OptionMenu(window, voiceIDVar, *voicesIDS)
-Selector.grid(row = 0, column = 0, padx= 5 ,pady = 5, columnspan = 2, sticky = tk.N + tk.S + tk.E + tk.W)
+Selector.grid(row = 1, column = 0, padx= 5 ,pady = 5,columnspan = 2, sticky = tk.N + tk.S + tk.E + tk.W)
 
 def change_dropdown(*args):
-    engine.setProperty('voice',voiceIDVar.get())
+    engine.setProperty('voice',"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_"+voiceIDVar.get())
 
 voiceIDVar.trace('w', change_dropdown)
 
@@ -77,17 +79,17 @@ recognize_btn = tk.Button(
     command=recognise,
     fg = "Green"
 )
-recognize_btn.grid(row = 1, column = 0, padx= 5 ,pady = 5, sticky = tk.N + tk.S + tk.E + tk.W)
+recognize_btn.grid(row = 2, column = 0, padx= 5 ,pady = 5, sticky = tk.N + tk.S + tk.E + tk.W)
 
 speak = tk.Button(
     text="Speak",
     command=SpeakField,
     fg="Blue"
 )
-speak.grid(row = 1, column = 1, padx= 5 ,pady = 5, sticky = tk.N+tk.S+tk.E+tk.W)
+speak.grid(row = 2, column = 1, padx= 5 ,pady = 5, sticky = tk.N+tk.S+tk.E+tk.W)
 
 field = tk.Text(width=100)
-field.grid(row = 2, column = 0, padx= 5 ,pady = 5, columnspan = 2)
+field.grid(row = 3, column = 0, padx= 5 ,pady = 5, columnspan = 2)
 
 if __name__ == "__main__":
     window.mainloop()
